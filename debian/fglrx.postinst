@@ -219,4 +219,6 @@ fi
 echo 'Running amdconfig'
 amdconfig --adapter=all --initial
 
+/etc/init.d/xdm start
+
 #DEBHELPER#

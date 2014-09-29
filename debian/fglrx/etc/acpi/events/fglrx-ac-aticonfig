@@ -1,6 +1,0 @@
-# /etc/acpi/events/fglrx-ac-aticonfig
-# Called when the user connects/disconnects ac power
-# 
-
-event=ac_adapter
-action=/etc/acpi/fglrx-powermode.sh
