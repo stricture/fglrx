@@ -1,0 +1,6 @@
+# /etc/acpi/events/fglrx-lid-aticonfig
+# Called when the user opens or closes the laptop lid
+# 
+
+event=button[ /]lid
+action=/etc/acpi/fglrx-powermode.sh

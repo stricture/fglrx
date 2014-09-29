@@ -1,0 +1,47 @@
+#Lintian overrides
+debian/overrides/fglrx                   usr/share/lintian/overrides
+
+#Actual kernel modules
+lib/modules/fglrx/build_mod/*                   usr/src/fglrx-14.200
+debian/dkms/*                                   usr/src/fglrx-14.200
+arch/x86_64/lib/modules/fglrx/build_mod/lib* usr/src/fglrx-14.200
+debian/dkms.conf                                usr/src/fglrx-14.200
+
+#DRI stuff
+arch/x86_64/usr/X11R6/lib64/libAMD*    usr/lib/fglrx
+
+#debian integration
+debian/overrides/fglrx                   usr/share/lintian/overrides
+debian/acpi/fglrx-*-aticonfig                   etc/acpi/events
+debian/acpi/fglrx-powermode.sh                  etc/acpi
+debian/10fglrx                                  usr/lib/fglrx
+etc/ati/*                                       usr/lib/fglrx/etc/ati
+arch/x86_64/etc/OpenCL/vendors/*.icd         usr/lib/fglrx/etc/OpenCL/vendors
+
+#Blacklist some card ids from GRUB gfxpayload=keep
+debian/fglrx.grub-gfxpayload                    usr/share/fglrx
+
+#binaries
+arch/x86_64/usr/bin/*                        usr/lib/fglrx/bin
+arch/x86_64/usr/X11R6/bin/ati*               usr/lib/fglrx/bin
+arch/x86_64/usr/X11R6/bin/fgl*               usr/lib/fglrx/bin
+usr/sbin/*sh                                    usr/share/fglrx
+
+#DRI stuff
+arch/x86_64/usr/X11R6/lib64/liba*.so*        usr/lib/fglrx
+arch/x86_64/usr/X11R6/lib64/libf*.so*        usr/lib/fglrx
+arch/x86_64/usr/X11R6/lib64/libX*.so*        usr/lib/fglrx
+arch/x86_64/usr/X11R6/lib64/fglrx/*libGL.so* usr/lib/fglrx
+arch/x86_64/usr/X11R6/lib64/modules/dri      usr/lib/fglrx
+
+#Xorg stuff
+xpic_64a/usr/X11R6/lib64/modules/*.so         usr/lib/fglrx/xorg/modules
+xpic_64a/usr/X11R6/lib64/modules/drivers      usr/lib/fglrx/xorg/modules
+xpic_64a/usr/X11R6/lib64/modules/linux        usr/lib/fglrx/xorg/modules
+xpic_64a/usr/X11R6/lib64/modules/extensions   usr/lib/fglrx/xorg/modules
+
+#CAL stuff
+arch/x86_64/usr/lib64/*.so*                  usr/lib/fglrx
+
+#PXpress stuff
+debian/pxpress/*                                      usr/lib/fglrx

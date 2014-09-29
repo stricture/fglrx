@@ -1,0 +1,2 @@
+xviddriver:Depends=xserver-xorg-core|xserver-xorg-core-lts-quantal|xserver-xorg-core-lts-raring|xserver-xorg-core-lts-saucy
+xviddriver:Provides=xorg-driver-video

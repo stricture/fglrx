@@ -1,0 +1,7 @@
+Authors and contributors (packaging scripts):
+-------------------------
+
+Alberto Milone <alberto.milone@canonical.com>  -- current maintainer, alternatives system support, kernel detection logic, PowerXpress support
+Mario Limonciello <mario_limonciello@dell.com> -- former maintainer and initial packager, DKMS support, automatic source generation code, port to debhelper 7
+Aric Cyr <Aric.Cyr@gmail.com>                  -- former maintainer of the Debian packages
+Flavio Stanchina <flavio@stanchina.net>        -- former maintainer of the Debian packages

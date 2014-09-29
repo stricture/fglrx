@@ -1,0 +1,6 @@
+fglrx-installer (2:14.200-0ubuntu1) precise; urgency=low
+
+  * Initial packaging for Sagitta HPC. Strip out all i386 and Qt bits.
+
+ -- Jeremi Gosney <jgosney@stricture-group.com>  Sun, 28 Sep 2014 16:27:02 -0700
+

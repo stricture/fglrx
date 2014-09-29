@@ -1,0 +1,21 @@
+#We are in restricted, whether lintian has ever heard of it or not
+fglrx: unknown-section restricted
+
+#These unfortunately are needed if we really want to be able to link?
+fglrx: arch-independent-package-contains-binary-or-object ./usr/src/fglrx-#CVERSION#/libfglrx_ip.a.GCC3
+fglrx: unstripped-binary-or-object ./usr/src/fglrx-#CVERSION#/libfglrx_ip.a.GCC3
+fglrx: arch-independent-package-contains-binary-or-object ./usr/src/fglrx-#CVERSION#/libfglrx_ip.a.GCC4
+fglrx: unstripped-binary-or-object ./usr/src/fglrx-#CVERSION#/libfglrx_ip.a.GCC4
+
+#AMD doesn't appear to document these binaries
+fglrx: binary-without-manpage usr/bin/aticonfig
+fglrx: binary-without-manpage usr/bin/atiodcli
+fglrx: binary-without-manpage usr/bin/atiode
+fglrx: binary-without-manpage usr/bin/fglrxinfo
+
+#We have NO control of AMD's build process
+fglrx: sharedobject-in-library-directory-missing-soname usr/lib/libatiadlxx.so
+fglrx: shlib-with-non-pic-code usr/lib/libGL.so.1.2
+
+#It's awfully silly to break these out as they are only ever installed with fglrx
+fglrx: package-name-doesnt-match-sonames libGL1 libfglrx-dm1.0 libfglrx-pp1.0 libfglrx-tvout1

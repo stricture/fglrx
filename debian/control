@@ -1,0 +1,20 @@
+Source: fglrx-installer
+Section: restricted/misc
+Priority: extra
+Maintainer: Jeremi Gosney <jgosney@stricture-group.com>
+Build-Depends: debhelper (>= 7), dh-modaliases, libxext6, libxrandr2, libice6, libsm6, libfontconfig1, libxi6, libxcursor1, fakeroot, libdrm2,
+               libgl1-mesa-glx | libgl1-mesa-glx-lts-quantal, libxinerama1, execstack
+Standards-Version: 3.8.3
+Homepage: http://support.amd.com
+
+Package: fglrx
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, dkms, make, linux-libc-dev, ${xviddriver:Depends}
+Conflicts: fglrx-driver, xorg-driver-binary, xfree86-driver-fglrx, xorg-driver-fglrx, fglrx-kernel-source, libamdxvba1, fglrx-modaliases, libhwloc-plugins, libopencl1
+Replaces: fglrx-driver, xorg-driver-binary, xfree86-driver-fglrx, xorg-driver-fglrx, fglrx-kernel-source, libamdxvba1, fglrx-modaliases, fglrx-updates, libopencl1
+Provides: fglrx-driver, xorg-driver-binary, libopencl1
+XB-Modaliases: ${modaliases}
+Description: Proprietary driver for AMD Radeon and FireGL graphics accelerators
+ Proprietary driver for AMD Radeon and FireGL graphics accelerators
+ .
+ Proprietary display driver for AMD Radeon and FireGL graphics accelerators, including AMD OpenCL runtime environment

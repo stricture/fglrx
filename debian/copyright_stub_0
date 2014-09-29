@@ -1,0 +1,14 @@
+This package was debianized by Mario Limonciello <superm1@ubuntu.com> on
+Tue, 27 May 2008 10:22:21 -0600.
+
+The latest Linux graphics driver was downloaded from the 
+AMD website (www.amd.com), and then this package was generated using:
+
+	sh $VERSION.run --buildpkg Ubuntu/source
+
+----------------------------------------------------------------------------
+
+Driver License:
+
+Copyright (c) 2011 Advanced Micro Devices, Inc.
+

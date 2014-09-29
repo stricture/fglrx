@@ -1,0 +1,7 @@
+debian/10fglrx
+debian/dkms.conf
+debian/fglrx.install
+debian/fglrx-dev.install
+debian/fglrx-amdcccle.install
+debian/overrides/fglrx
+debian/modaliases/fglrx-modules.alias.override

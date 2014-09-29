@@ -1,0 +1,6 @@
+libGL 1 fglrx
+libXvBAW 1 fglrx
+libOpenCL 1 fglrx
+libAMDXvBA 1 fglrx
+libatiuki 1 fglrx
+libfglrx_dm 1.0 fglrx

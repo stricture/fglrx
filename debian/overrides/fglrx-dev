@@ -1,0 +1,3 @@
+#We are in restricted, whether lintian has ever heard of it or not
+xorg-driver-fglrx-dev: unknown-section restricted
+

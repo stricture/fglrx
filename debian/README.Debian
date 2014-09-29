@@ -1,0 +1,96 @@
+AMD video drivers for Ubuntu
+============================
+
+Further information can be found at http://support.amd.com/ -- look for
+the "Download Drivers" area and follow links to the Linux drivers.
+
+This package is generated automatically via the official AMD driver
+installer that is available from the above homepage.
+
+DKMS
+-------------------------
+   Ubuntu includes support to build modules using a utility developed by
+   Dell, called DKMS.  It will automatically build your kernel module
+   for you when you first boot into the kernel (or as necessary).
+
+   See the DKMS man page for more information.
+
+   Note: the OBSOLETE_BY line in dkms.conf may specify a kernel version
+         which obsoletes the necessity for this particular DKMS module.
+         For example, OBSOLETE_BY=2.6.39 will prevent DKMS from building
+         modules for kernels >= 2.6.39.
+
+Source building
+-------------------------
+Starting with Intrepid, an extra target has been added to allow
+--buildpkg Ubuntu/source.  This target should be adequate for 
+sending up to the Ubuntu archive.  By keeping the same source package
+in both places, there should be fewer conflicts for people.
+
+On a semiregular basis, the debian/changelog should be merged
+into this package, but people adding to the Ubuntu archive should
+be sure to update these sorts of things otherewise.
+
+Kernel patches
+-------------------------
+If you need to provide a kernel patch (say for a kernel not formally
+supported yet by AMD), you can add this patch in the debian/patches
+directory.  It will only be used for the current development release,
+as indicated in debian/rules.  When upgrading from current development
+release to next development release, this codename in debian/rules should
+be bumped too.
+
+Copyright file
+-------------------------
+The copyright file is automatically generated in debian/rules by
+concatenating debian/copyright_stub0, AMD's EULA and debian/
+copyright_stub1. This allows us to always ship the latest EULA
+from AMD.
+
+In order to update the copyright file manually it's sufficient to use
+the "debclean" command.
+
+Update procedure
+-------------------------
+When a new -fglrx is available, do the following to update
+fglrx-installer:
+
+0.  On your build system, make sure you have the prerequisites
+    installed:
+
+    $ sudo apt-get build-dep fglrx-installer
+
+1.  Download the archive file and unpack it to get the .run file
+
+2.  Do a --buildpkg Ubuntu/source, which will build a diff.gz,
+    orig.tar.gz and an unsigned dsc.  For example:
+
+    $ bash ./ati-driver-installer-*.run --buildpkg Ubuntu/source
+
+    This might prompt for your password for sudo privs.  It may
+    install things to your system it needs for constructing the
+    source packages, such as cdbs, libstdc++, etc.  (As of 8.600
+    it seems to no longer do this for source pkgs.)
+
+3.  dpkg-source -x that dsc to unpack it into a directory, then
+    cd into the resultant directory.
+
+4.  dch -e to update the new changelog entry.
+    Make sure to mark out any bugs that get closed with it.
+
+    Also doublecheck that it includes debian/ changes up to the current
+    Ubuntu version; if not, some merging may be required.
+
+5.  debuild -S to produce a new .dsc
+
+6.  Verify the new .dsc produces valid .debs by running it through
+    pbuilder, sbuild, etc. as usual.
+
+7.  Install and test the .debs, and then dput the .changes file
+
+If any changes to files in debian/ are needed, make sure to let the
+maintainer (Alberto aka tseliot) know, so he can sync them into the git
+tree AMD pulls from.
+
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Thu, 21 Apr 2011 21:53:14 +0200
