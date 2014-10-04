@@ -1,4 +1,11 @@
-fglrx-installer (2:14.200-0ubuntu1) precise; urgency=low
+fglrx-installer (2:14.301.1001) precise; urgency=low
+
+  * Bump up to Catalyst 14.9
+
+ -- Jeremi Gosney <jgosney@stricture-group.com>  Sat, 4 Oct 2014 02:08:05 -0700
+
+
+fglrx-installer (2:14.200) precise; urgency=low
 
   * Initial packaging for Sagitta HPC. Strip out all i386 and Qt bits.
 

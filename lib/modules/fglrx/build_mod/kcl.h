@@ -32,7 +32,7 @@ typedef enum{
 }KCL_SIG;
 
 extern void ATI_API_CALL KCL_SEND_SIG(int pid, KCL_SIG sig);
-
+extern void ATI_API_CALL KCL_Init_Suspend_Console(void);
 
 #endif
 

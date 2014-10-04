@@ -78,7 +78,7 @@ static int firegl_acpi_video_event(struct notifier_block *nb, unsigned long val,
 {
     struct acpi_bus_event *entry;
     KCL_ACPI_ContextHandle ctx_handle;
-
+    unsigned int  ret = 0;
     entry = (struct acpi_bus_event *)data;
     if ( !strcmp(entry->device_class, KCL_ACPI_VIDEO_CLASS) )
     {            
@@ -89,10 +89,12 @@ static int firegl_acpi_video_event(struct notifier_block *nb, unsigned long val,
         }
         else
         {
-            libip_video_notify(NULL, entry->type, ctx_handle);
+            ret = libip_video_notify(NULL, entry->type, ctx_handle);
         }
     }
-    return NOTIFY_OK;
+
+    return (ret == 0)? NOTIFY_OK:NOTIFY_BAD;
+
 }
 
 /** \brief kernel call back function when acpi ac events happen
@@ -830,9 +832,9 @@ KCL_ACPI_DevHandle ATI_API_CALL KCL_ACPI_GetAlternateHandle(KCL_ACPI_DevHandle p
 static acpi_status KCL_ACPI_Slot_No_Hotplug(KCL_ACPI_DevHandle handle, u32 lvl, void *data, void **rv)
 {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,7)
-   struct acpi_device *tdev;
+   struct acpi_device *tdev = NULL;
    struct pci_dev *pdev = (struct pci_dev *)data;
-   int device;
+   int device = 0;
 
    acpi_bus_get_device(handle, &tdev);
    if(tdev != NULL)

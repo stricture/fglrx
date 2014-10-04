@@ -116,7 +116,7 @@ extern void KCL_ACPI_VideoNotify(KCL_ACPI_DevHandle handle, unsigned int event, 
 
 // libip functions
 extern void ATI_API_CALL libip_ac_notify(KCL_ACPI_DevHandle handle, unsigned int event, KCL_ACPI_ContextHandle data, unsigned int *newstate);
-extern void ATI_API_CALL libip_video_notify(KCL_ACPI_DevHandle handle, unsigned int event, KCL_ACPI_ContextHandle data);
+extern unsigned int ATI_API_CALL libip_video_notify(KCL_ACPI_DevHandle handle, unsigned int event, KCL_ACPI_ContextHandle data);
 
 extern void ATI_API_CALL libip_lid_open_notify(unsigned int);
 

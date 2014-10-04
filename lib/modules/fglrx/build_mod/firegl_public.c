@@ -1781,15 +1781,17 @@ KCL_TYPE_Uid ATI_API_CALL KCL_GetEffectiveUid(void)
 {
 #ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
     return __kuid_val(current_euid());
-#else 
-
+#else
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,00)
+    return __kuid_val(current_euid());
+#else
 #ifdef current_euid
     return current_euid();
 #else
     return current->euid;
-#endif
-
-#endif
+#endif // current_euid
+#endif // LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,00)
+#endif // CONFIG_UIDGID_STRICT_TYPE_CHECKS
 }
 
 /** /brief Delay execution for the specified number of microseconds

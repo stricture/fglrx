@@ -21,6 +21,13 @@
 #include "kcl_config.h"
 #include "kcl_type.h"
 #include "kcl.h"
+
+#include "kcl_debug.h"
+#include <linux/vt_kern.h>
+#include <linux/vt_buffer.h>
+
+#define SUSPEND_CONSOLE  (MAX_NR_CONSOLES-1)
+
 /** \brief Send signal to a specified pid
  *  \param pid   thread group leader id 
  *  \param sig   signal to be send 
@@ -36,4 +43,20 @@ void ATI_API_CALL KCL_SEND_SIG(int pid, KCL_SIG sig)
 }    
 
 
+void ATI_API_CALL KCL_Init_Suspend_Console(void)
+{
+    if(vc_cons[SUSPEND_CONSOLE].d != NULL && vc_cons[fg_console].d->vt_newvt == SUSPEND_CONSOLE)
+    {
+        struct vc_data  *vc = vc_cons[SUSPEND_CONSOLE].d;
+       	unsigned int    count;
+        unsigned short  *start;
+    
+        vc->vc_x    = 0;
+        vc->vc_y    = 0;
+        vc->vc_pos  = vc->vc_origin + vc->vc_y * vc->vc_size_row + (vc->vc_x<<1);
 
+        count = vc->vc_cols * vc->vc_rows;
+        start = (unsigned short *)vc->vc_origin;
+        scr_memsetw(start, vc->vc_video_erase_char, 2 * count);
+    }
+}
