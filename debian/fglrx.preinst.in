@@ -62,7 +62,7 @@ fix_diversions()
 
 }
 
-/etc/init.d/xdm stop
+test -e /etc/init.d/xdm && /etc/init.d/xdm stop
 
 case "$1" in
     install|upgrade)

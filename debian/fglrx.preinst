@@ -62,8 +62,7 @@ fix_diversions()
 
 }
 
-/etc/init.d/xdm stop
-rmmod fglrx amd_iommu_v2
+test -e /etc/init.d/xdm && /etc/init.d/xdm stop
 
 case "$1" in
     install|upgrade)
