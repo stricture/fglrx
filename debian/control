@@ -10,6 +10,7 @@ Homepage: http://support.amd.com
 Package: fglrx
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, dkms, make, linux-libc-dev, python, perl, ${xviddriver:Depends}
+Recommends: xdm, sagitta-xdm-conf
 Conflicts: fglrx-driver, xorg-driver-binary, xfree86-driver-fglrx, xorg-driver-fglrx, fglrx-kernel-source, libamdxvba1, fglrx-modaliases, libhwloc-plugins, libopencl1
 Replaces: fglrx-driver, xorg-driver-binary, xfree86-driver-fglrx, xorg-driver-fglrx, fglrx-kernel-source, libamdxvba1, fglrx-modaliases, fglrx-updates, libopencl1
 Provides: fglrx-driver, xorg-driver-binary, libopencl1
