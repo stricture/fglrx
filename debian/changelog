@@ -1,3 +1,9 @@
+fglrx-installer (2:14.301.1001-1sagitta1) precise; urgency=low
+
+  * symlink libatiadlxx so libsagitta-amdinfo-perl can find it
+
+ -- epixoip <epixoip@token>  Tue, 14 Oct 2014 15:56:36 -0700
+
 fglrx-installer (2:14.301.1001) precise; urgency=low
 
   * Bump up to Catalyst 14.9
