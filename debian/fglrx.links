@@ -4,5 +4,5 @@ usr/lib/fglrx/libGL.so.1.2 usr/lib/fglrx/libGL.so.1
 usr/lib/fglrx/libGL.so.1 usr/lib/fglrx/libGL.so
 usr/lib/fglrx/libOpenCL.so.1 usr/lib/fglrx/libOpenCL.so
 usr/lib/fglrx/libAMDXvBA.so.1.0 usr/lib/fglrx/libAMDXvBA.so.1
+usr/lib/fglrx/libatiadlxx.so lib/libatiadlxx.so
 usr/lib/fglrx/bin/aticonfig usr/lib/fglrx/bin/amdconfig
-usr/lib/fglrx/libatiadlxx.so lib/
