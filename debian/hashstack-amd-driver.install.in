@@ -1,30 +1,30 @@
 #Lintian overrides
-debian/overrides/#DRIVERNAME#                   #DATADIR#/lintian/overrides
+debian/overrides/#DRIVERNAME#                         #DATADIR#/lintian/overrides
 
 #Actual kernel modules
-lib/modules/fglrx/build_mod/*                   usr/src/#DRIVERNAME#-#CVERSION#
-arch/#SRCARCH#/lib/modules/fglrx/build_mod/lib* usr/src/#DRIVERNAME#-#CVERSION#
-debian/dkms.conf                                usr/src/#DRIVERNAME#-#CVERSION#
+lib/modules/fglrx/build_mod/*                         usr/src/#DRIVERNAME#-#CVERSION#
+arch/#SRCARCH#/lib/modules/fglrx/build_mod/lib*       usr/src/#DRIVERNAME#-#CVERSION#
+debian/dkms.conf                                      usr/src/#DRIVERNAME#-#CVERSION#
 
 #DRI stuff
-arch/#SRCARCH#/usr/X11R6/#SRCLIBDIR#/libAMD*    #PKGLIBDIR#
+arch/#SRCARCH#/usr/X11R6/#SRCLIBDIR#/libAMD*          #PKGLIBDIR#
 
 #debian integration
-debian/overrides/#DRIVERNAME#                   #DATADIR#/lintian/overrides
-debian/acpi/fglrx-*-aticonfig                   #SYSCONFDIR#/acpi/events
-debian/acpi/fglrx-powermode.sh                  #SYSCONFDIR#/acpi
-debian/10fglrx                                  #PKGLIBDIR#
-etc/ati/*                                       #PKGLIBDIR#/#SYSCONFDIR#/ati
-arch/#SRCARCH#/etc/OpenCL/vendors/*.icd         #PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors
+debian/overrides/#DRIVERNAME#                         #DATADIR#/lintian/overrides
+debian/acpi/fglrx-*-aticonfig                         #SYSCONFDIR#/acpi/events
+debian/acpi/fglrx-powermode.sh                        #SYSCONFDIR#/acpi
+debian/10fglrx                                        #PKGLIBDIR#
+etc/ati/*                                             #PKGLIBDIR#/#SYSCONFDIR#/ati
+arch/#SRCARCH#/etc/OpenCL/vendors/*.icd               #PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors
 
 #Blacklist some card ids from GRUB gfxpayload=keep
-debian/hashstack-amd-driver.grub-gfxpayload     #PKGDATADIR#
+debian/#DRIVERNAME#.grub-gfxpayload                   #PKGDATADIR#
 
 #binaries
-arch/#SRCARCH#/usr/bin/*                        #PKGBINDIR#
-arch/#SRCARCH#/usr/X11R6/bin/ati*               #PKGBINDIR#
-arch/#SRCARCH#/usr/X11R6/bin/fgl*               #PKGBINDIR#
-usr/sbin/*sh                                    #PKGDATADIR#
+arch/#SRCARCH#/usr/bin/*                              #PKGBINDIR#
+arch/#SRCARCH#/usr/X11R6/bin/ati*                     #PKGBINDIR#
+arch/#SRCARCH#/usr/X11R6/bin/fgl*                     #PKGBINDIR#
+usr/sbin/*sh                                          #PKGDATADIR#
 
 #DRI stuff
 arch/#SRCARCH#/usr/X11R6/#SRCLIBDIR#/liba*.so*        #PKGLIBDIR#
@@ -43,4 +43,4 @@ arch/#SRCARCH#/usr/X11R6/#SRCLIBDIR#/modules/dri      #PKGLIBDIR#
 arch/#SRCARCH#/usr/#SRCLIBDIR#/*.so*                  #PKGLIBDIR#
 
 #PXpress stuff
-debian/pxpress/*                                      usr/lib/fglrx
+debian/pxpress/*                                      usr/lib/#DRIVERNAME#

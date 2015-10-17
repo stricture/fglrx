@@ -298,9 +298,9 @@ endif
 	# Generate modaliases
 	sh -e debian/modaliases/fglrx_supported \
 		lib/modules/fglrx/build_mod/fglrxko_pci_ids.h $(PKG_module) $(PKG_driver) > \
-		debian/fglrx.modaliases
+		debian/$(PKG_driver).modaliases
 	dh_modaliases
-	rm debian/fglrx.modaliases
+	rm debian/$(PKG_driver).modaliases
 
 	#Run the normal stuff
 	dh binary-arch
@@ -311,9 +311,9 @@ binary: binary-arch binary-indep gen-abi-substvars;
 
 override_dh_shlibdeps:
 #ifeq ($(DEB_HOST_ARCH),amd64)
-#	dh_shlibdeps -l$(CURDIR)/debian/fglrx/$(PKG_libdir):$(CURDIR)/debian/fglrx/$(PKG_libdir)/bin:$(CURDIR)/debian/fglrx/$(PKG_libdir)/sbin:$(CURDIR)/debian/fglrx/$(PKG_libdir32) -Xlib32
+#	dh_shlibdeps -l$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir):$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir)/bin:$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir)/sbin:$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir32) -Xlib32
 #else
-	dh_shlibdeps -l$(CURDIR)/debian/fglrx/$(PKG_libdir):$(CURDIR)/debian/fglrx/$(PKG_libdir)/bin
+	dh_shlibdeps -l$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir):$(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir)/bin
 #endif
 
 %:
