@@ -3,7 +3,6 @@ debian/overrides/#DRIVERNAME#                   #DATADIR#/lintian/overrides
 
 #Actual kernel modules
 lib/modules/fglrx/build_mod/*                   usr/src/#DRIVERNAME#-#CVERSION#
-debian/dkms/*                                   usr/src/#DRIVERNAME#-#CVERSION#
 arch/#SRCARCH#/lib/modules/fglrx/build_mod/lib* usr/src/#DRIVERNAME#-#CVERSION#
 debian/dkms.conf                                usr/src/#DRIVERNAME#-#CVERSION#
 
@@ -19,7 +18,7 @@ etc/ati/*                                       #PKGLIBDIR#/#SYSCONFDIR#/ati
 arch/#SRCARCH#/etc/OpenCL/vendors/*.icd         #PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors
 
 #Blacklist some card ids from GRUB gfxpayload=keep
-debian/fglrx.grub-gfxpayload                    #PKGDATADIR#
+debian/hashstack-amd-driver.grub-gfxpayload     #PKGDATADIR#
 
 #binaries
 arch/#SRCARCH#/usr/bin/*                        #PKGBINDIR#

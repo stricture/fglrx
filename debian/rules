@@ -98,11 +98,8 @@ alias radeon off
 alias lbm-radeon off
 endef
 
-refresh_copyright:
-	# refresh copyright file
-	cat LICENSE.md >> debian/copyright
 
-clean: refresh_copyright
+clean: 
 	# remove any file generated from a template
 	for file in *.in; do \
 		# strip only the last .in from the name \
@@ -194,7 +191,7 @@ gen-abi-substvars:
 	# Generate the xserver ABI dependencies
 	cat debian/substvars >> debian/$(PKG_driver).substvars
 
-binary-arch: refresh_copyright gen-abi-substvars
+binary-arch: gen-abi-substvars
 	#Steps that we can't easily represent in debhelper files or .in files yet
 
 	# Remove any libraries that may be caught by shell expansion

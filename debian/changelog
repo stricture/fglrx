@@ -1,3 +1,10 @@
+hashstack-amd-driver (2:15.201.1151-0sagitta1) precise; urgency=low
+
+  * Upgrade to 15.9
+  * Rename package
+
+ -- Jeremi Gosney <jgosney@sagitta.pw>  Sat, 17 Oct 2015 08:05:16 -0700
+
 fglrx-installer (2:14.301.1001-3sagitta1) precise; urgency=low
 
   * depend on xserver-xorg
