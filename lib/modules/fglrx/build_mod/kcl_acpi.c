@@ -27,6 +27,13 @@
 #include <acpi/button.h>
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
+#include <generated/utsrelease.h>
+#ifndef UTS_UBUNTU_RELEASE_ABI
+#define UTS_UBUNTU_RELEASE_ABI -1
+#endif
+#endif
+
 #include "kcl_config.h"
 #include "kcl_type.h"
 #include "kcl_acpi.h"
@@ -831,7 +838,7 @@ KCL_ACPI_DevHandle ATI_API_CALL KCL_ACPI_GetAlternateHandle(KCL_ACPI_DevHandle p
 
 static acpi_status KCL_ACPI_Slot_No_Hotplug(KCL_ACPI_DevHandle handle, u32 lvl, void *data, void **rv)
 {
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,7)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,7) && LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0)
    struct acpi_device *tdev = NULL;
    struct pci_dev *pdev = (struct pci_dev *)data;
    int device = 0;
@@ -851,12 +858,23 @@ static acpi_status KCL_ACPI_Slot_No_Hotplug(KCL_ACPI_DevHandle handle, u32 lvl, 
 
 void ATI_API_CALL KCL_ACPI_No_Hotplug(void* dev)
 {
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,7)
     struct pci_dev  *pdev = (struct pci_dev*)dev;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,7) && LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0)
     if(pdev && pdev->bus && pdev->bus->bridge)
     {
        acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_HANDLE(pdev->bus->bridge), 1, KCL_ACPI_Slot_No_Hotplug, NULL, pdev , NULL);
+    }
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
+    if(pdev)
+    {
+#if (UTS_UBUNTU_RELEASE_ABI < 0 && LINUX_VERSION_CODE < KERNEL_VERSION(4,1,3)) || (UTS_UBUNTU_RELEASE_ABI >= 0 && UTS_UBUNTU_RELEASE_ABI < 26 && LINUX_VERSION_CODE <= KERNEL_VERSION(3,19,8))
+       pci_ignore_hotplug(pdev);
+#else
+       pdev->ignore_hotplug = 1;
+       if ( pdev->bus->self)
+          pdev->bus->self->ignore_hotplug = 1;
+#endif
     }
 #endif
 }
@@ -1020,7 +1038,7 @@ int ATI_API_CALL KCL_ACPI_ParseTable(char *id, KCL_ACPI_IntCallbackHandle handle
     {
         return KCL_ACPI_ERROR;
     }
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,1)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0)
     ((acpi_tbl_table_handler)handler)(hdr);
 #else
     ((acpi_table_handler)handler)(hdr);

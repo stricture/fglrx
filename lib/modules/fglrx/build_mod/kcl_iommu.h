@@ -50,7 +50,8 @@ typedef union _iommu_req_perm_
 #define MMIO_CONTROL_OFFSET     0x0018
 #define MMIO_EXCL_BASE_OFFSET   0x0020
 #define MMIO_EXCL_LIMIT_OFFSET  0x0028
-#define MMIO_EXT_FEATURES	    0x0030
+#define MMIO_EXT_FEATURES	0x0030
+#define MMIO_PER_OPTCTL_OFFSET  0x016c
 #define MMIO_CMD_HEAD_OFFSET	0x2000
 #define MMIO_CMD_TAIL_OFFSET	0x2008
 #define MMIO_EVT_HEAD_OFFSET	0x2010
@@ -59,6 +60,7 @@ typedef union _iommu_req_perm_
 
 #define MMIO_EXCL_ENABLE_MASK   0x01ULL
 #define MMIO_EXCL_ALLOW_MASK    0x02ULL
+#define MMIO_PER_OPTEN_MASK     0x0d
 
 typedef struct _iommu_info_
 {
@@ -111,7 +113,11 @@ int ATI_API_CALL KCL_IOMMU_InitDevice( KCL_PCI_DevHandle pcidev, KCL_IOMMU_info_
 void ATI_API_CALL KCL_IOMMU_FreeDevice( KCL_PCI_DevHandle pcidev);
 int ATI_API_CALL KCL_IOMMU_BindPasid( KCL_PCI_DevHandle pcidev, int pid, int  pasid);
 void ATI_API_CALL KCL_IOMMU_UnbindPasid( KCL_PCI_DevHandle pcidev, int  pasid);
+int ATI_API_CALL KCL_IOMMU_RestorePasid( KCL_PCI_DevHandle pcidev, int pasid, void *task);
+int ATI_API_CALL KCL_IOMMU_RestoreCBs( KCL_PCI_DevHandle pcidev);
 int ATI_API_CALL KCL_IOMMU_CheckInfo( KCL_PCI_DevHandle pcidev);
 void ATI_API_CALL KCL_IOMMU_SetExclusion(unsigned long long pa, unsigned long long length);
+void ATI_API_CALL KCL_IOMMU_SetByPass (unsigned int flag);
+
 
 #endif

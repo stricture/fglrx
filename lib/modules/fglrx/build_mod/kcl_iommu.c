@@ -66,6 +66,7 @@ int ATI_API_CALL KCL_IOMMU_InitDevice( KCL_PCI_DevHandle pcidev,KCL_IOMMU_info_t
 #ifdef IOMMUV2_SUPPORT 
     struct amd_iommu_device_info info;
     struct pci_dev* pdev = (struct pci_dev*)pcidev;
+    
     memset(&info, 0 , sizeof(info));
     if(amd_iommu_device_info(pdev, &info))
     {
@@ -98,6 +99,7 @@ void ATI_API_CALL KCL_IOMMU_FreeDevice( KCL_PCI_DevHandle pcidev)
 {
 #ifdef IOMMUV2_SUPPORT 
     struct pci_dev* pdev = (struct pci_dev*)pcidev;
+    
     amd_iommu_free_device(pdev);
 #endif    
 }
@@ -136,7 +138,8 @@ int ATI_API_CALL KCL_IOMMU_BindPasid( KCL_PCI_DevHandle pcidev,int pid,int pasid
     int ret = 0;
 #ifdef IOMMUV2_SUPPORT
     struct pci_dev* pdev = (struct pci_dev*)pcidev;
-    struct task_struct *group_leader = current->group_leader;
+    struct task_struct *group_leader =  current->group_leader;
+
     if(pid == group_leader->pid)
     {
         ret =  amd_iommu_bind_pasid( pdev,
@@ -164,8 +167,9 @@ int ATI_API_CALL KCL_IOMMU_BindPasid( KCL_PCI_DevHandle pcidev,int pid,int pasid
     {
         KCL_DEBUG_ERROR("register invalid pasid context call back failed, pid:0x%x, group_leader id:0x%x, pasid:0x%x. ret:0x%x .\n", pid,group_leader->pid,pasid,ret); 
         return  ret;
-    }    
-
+    }
+    
+    return ret;
 #endif    
     return ret;
 }
@@ -178,7 +182,50 @@ void ATI_API_CALL KCL_IOMMU_UnbindPasid( KCL_PCI_DevHandle pcidev,int pasid)
 {
 #ifdef IOMMUV2_SUPPORT
     struct pci_dev* pdev = (struct pci_dev*)pcidev;
+
     amd_iommu_unbind_pasid( pdev, pasid);
+    
+#endif    
+}
+
+int ATI_API_CALL KCL_IOMMU_RestorePasid( KCL_PCI_DevHandle pcidev, int pasid, void *task)
+{
+#ifdef IOMMUV2_SUPPORT
+    struct pci_dev* pdev = (struct pci_dev*)pcidev;
+    int ret;
+    ret = amd_iommu_bind_pasid( pdev, pasid, (struct task_struct *)task);
+    if(ret)
+    {
+        KCL_DEBUG_ERROR("KCL_IOMMU_RestorePasid: fail to rebind pasid %d pid %d ret:0x%x.\n", pasid, ((struct task_struct *)task)->pid, ret); 
+    }
+    return ret;
+#endif
+    return 0;
+}
+
+int ATI_API_CALL KCL_IOMMU_RestoreCBs( KCL_PCI_DevHandle pcidev)
+{
+#ifdef IOMMUV2_SUPPORT
+    struct pci_dev* pdev = (struct pci_dev*)pcidev;
+    int ret = 0;
+
+    //register call back on invalid PPR. 
+    ret = amd_iommu_set_invalid_ppr_cb( pdev,(amd_iommu_invalid_ppr_cb)kcl_iommu_invalid_pri_request);
+    if(ret)
+    {
+        KCL_DEBUG_ERROR("KCL_IOMMU_RestoreCBs: register invalid PPR call back failed, ret:0x%x .\n", ret); 
+        return  ret;
+    }    
+
+    //register call back for invalidating a pasid contect . 
+    ret = amd_iommu_set_invalidate_ctx_cb( pdev,(amd_iommu_invalidate_ctx)kcl_iommu_invalidate_ctx); 
+    if(ret)
+    {
+        KCL_DEBUG_ERROR("KCL_IOMMU_RestoreCBs: register invalid pasid context call back failed. ret:0x%x .\n", ret); 
+        return  ret;
+    }
+    
+    return ret;
 #endif    
 }
 
@@ -250,7 +297,23 @@ void ATI_API_CALL KCL_IOMMU_SetExclusion(unsigned long long pa, unsigned long lo
     entry = limit;
     KCL_IO_MEM_CopyToIO(iommu_base + MMIO_EXCL_LIMIT_OFFSET, &entry, sizeof(entry));
 
-    KCL_IO_MEM_Unmap(iommu_base);
+    KCL_IO_MEM_Unmap(iommu_base); 
+}
+
+void ATI_API_CALL KCL_IOMMU_SetByPass(unsigned int flag)
+{
+    u32 entry = 0;
+    if (KCL_ACPI_ParseTable("IVRS", (KCL_ACPI_IntCallbackHandle)KCL_IOMMU_MapMMIO) != KCL_ACPI_OK)
+    {
+        return ;
+    }
+
+    if (!iommu_base)
+    {
+        return ;
+    }
+    entry |= flag << MMIO_PER_OPTEN_MASK;
+    KCL_IO_MEM_CopyToIO(iommu_base + MMIO_PER_OPTCTL_OFFSET, &entry, sizeof(entry));
 }
 
 

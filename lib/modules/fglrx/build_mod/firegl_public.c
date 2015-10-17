@@ -233,6 +233,23 @@
 #endif
 
 // ============================================================
+
+#if defined(__get_cpu_var)
+#define GET_CPU_VAR(var) __get_cpu_var(var)
+#else
+#define GET_CPU_VAR(var) (*this_cpu_ptr(&(var)))
+#endif
+
+// read_cr4() and write_cr4() has changed from 4.0.0, 3.18.17
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,0,0) || ((LINUX_VERSION_CODE < KERNEL_VERSION(3,19,0)) && (LINUX_VERSION_CODE > KERNEL_VERSION(3,18,16)))
+#define READ_CR4()      __read_cr4()
+#define WRITE_CR4(x)    __write_cr4(x)
+#else
+#define READ_CR4()      read_cr4()
+#define WRITE_CR4(x)    write_cr4(x)
+#endif
+
+// ============================================================
 /* globals */
 
 char* firegl = NULL;
@@ -265,6 +282,8 @@ MODULE_LICENSE("Proprietary. (C) 2002 - ATI Technologies, Starnberg, GERMANY");
 #ifdef MODULE_DEVICE_TABLE
 MODULE_DEVICE_TABLE(pci, fglrx_pci_table);
 #endif
+
+MODULE_INFO(supported, "external");
 
 /* globals constants */
 const char*         KCL_SYSINFO_OsVersionString = UTS_RELEASE;
@@ -1196,7 +1215,8 @@ static int firegl_init_devices(kcl_device_t *pubdev)
                                        pdev)) != NULL)
         {
             num_of_devices++;
-            KCL_DEBUG_INFO("  vendor: %x device: %x count: %d\n", pid->vendor, pid->device, num_of_devices);
+            KCL_DEBUG_INFO("  vendor: %x device: %x revision: %hhx count: %d\n", 
+                           pid->vendor, pid->device, pdev->revision, num_of_devices);
             iommu += KCL_IOMMU_CheckInfo(pdev);
         }
     }
@@ -1774,6 +1794,14 @@ KCL_TYPE_Pid ATI_API_CALL KCL_GetTgid(void)
     return current->tgid; 
 }
 
+/** /brief Return the current Group Thread struct
+ *  /return OS dependent value of the Group Thread struct
+ */
+void * ATI_API_CALL KCL_GetGroupLeader(void)
+{
+    return current->group_leader;
+}
+
 /** /brief Return the effective user ID
  *  /return OS dependent value of the effective user ID
  */
@@ -1958,6 +1986,7 @@ int ATI_API_CALL KCL_KernelConfigParamIsDefined(KCL_ENUM_KernelConfigParam param
 /** /brief Vector of OS dependent values of security caps indexed by KCL_ENUM_ErrorCode */
 static int KCL_MAP_ErrorCode[] =
 {
+    ETIMEDOUT,      // KCL_ERROR_TIMED_OUT
     EBUSY,          // KCL_ERROR_DEVICE_RESOURCE_BUSY
     EINVAL,         // KCL_ERROR_INVALID_ARGUMENT
     EACCES,         // KCL_ERROR_PERMISSION_DENIED
@@ -2303,7 +2332,7 @@ void ATI_API_CALL KCL_MEM_SmallBufferFree(void* p)
 
 void* ATI_API_CALL KCL_MEM_Alloc(kcl_size_t size)
 {
-    return vmalloc_32(size);
+    return vmalloc(size);
 }
 
 void* ATI_API_CALL KCL_MEM_AllocAtomic(kcl_size_t size)
@@ -3185,6 +3214,24 @@ int ATI_API_CALL KCL_LockUserPages(unsigned long vaddr, unsigned long* page_list
     return ret;
 }
 
+/** \brief Lock down read only user pages
+ *
+ * \param vaddr User virtual address to lock
+ * \param page_list Physical page address list for locked down pages
+ * \param number of pages to lock
+ * \return number of pages locked down 
+ */
+int ATI_API_CALL KCL_LockReadOnlyUserPages(unsigned long vaddr, unsigned long* page_list, unsigned int page_cnt)
+{
+    int ret;
+
+    down_read(&current->mm->mmap_sem);
+    ret = get_user_pages(current, current->mm, vaddr, page_cnt, 0, 0, (struct page **)page_list, NULL);
+    up_read(&current->mm->mmap_sem);
+
+    return ret;
+}
+
 void ATI_API_CALL KCL_UnlockUserPages(unsigned long* page_list, unsigned int page_cnt)
 {
     unsigned int i;
@@ -3459,7 +3506,7 @@ int ATI_API_CALL KCL_InstallInterruptHandler(
 #else
         //when MSI enabled. keep irq disabled when calling the action handler,
         //exclude this IRQ from irq balancing (only on one CPU) 
-        ((useMSI) ? (IRQF_DISABLED | IRQF_NOBALANCING) : (IRQF_SHARED)),    
+        ((useMSI) ? (IRQF_DISABLED) : (IRQF_SHARED)),    
 #endif
         dev_name,
         context);
@@ -4459,8 +4506,8 @@ static void kcl_mem_pat_setup (void *info)
 
     if (cpu_has_pge)
     {
-        cr4 = read_cr4();
-        write_cr4(cr4 & ~X86_CR4_PGE);
+        cr4 = READ_CR4();
+        WRITE_CR4(cr4 & ~X86_CR4_PGE);
     }
      __flush_tlb();
 
@@ -4473,7 +4520,7 @@ static void kcl_mem_pat_setup (void *info)
     write_cr0(cr0 & 0xbfffffff);
     if (cpu_has_pge)
     {
-        write_cr4(cr4);
+        WRITE_CR4(cr4);
     }
     local_irq_restore(flags);
 
@@ -4500,8 +4547,8 @@ static void kcl_mem_pat_restore (void *info)
 
     if (cpu_has_pge)
     {
-        cr4 = read_cr4();
-        write_cr4(cr4 & ~X86_CR4_PGE);
+        cr4 = READ_CR4();
+        WRITE_CR4(cr4 & ~X86_CR4_PGE);
     }
      __flush_tlb();
   
@@ -4513,7 +4560,7 @@ static void kcl_mem_pat_restore (void *info)
     write_cr0(cr0 & 0xbfffffff);
     if (cpu_has_pge)
     {
-        write_cr4(cr4);
+        WRITE_CR4(cr4);
     }
     local_irq_restore(flags);
 
@@ -4807,8 +4854,8 @@ static unsigned long kasSetExecutionLevel(unsigned long level)
 {
     unsigned long orig_level;
 
-    orig_level = __get_cpu_var(kasExecutionLevel);
-    __get_cpu_var(kasExecutionLevel) = level;
+    orig_level = GET_CPU_VAR(kasExecutionLevel);
+    GET_CPU_VAR(kasExecutionLevel) = level;
 
     return orig_level;
 }
@@ -4820,7 +4867,7 @@ static unsigned long kasSetExecutionLevel(unsigned long level)
  */
 static unsigned long kas_GetExecutionLevel(void)
 {
-    return __get_cpu_var(kasExecutionLevel);
+    return GET_CPU_VAR(kasExecutionLevel);
 }
 
 /** \brief Type definition for kas_spin_lock() parameter */
@@ -6383,6 +6430,31 @@ void ATI_API_CALL KCL_create_uuid(void *buf)
     generate_random_uuid((char *)buf);
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,15,0)
+static int KCL_fpu_save_init(struct task_struct *tsk)
+{
+   struct fpu *fpu = &tsk->thread.fpu;
+
+   if(static_cpu_has(X86_FEATURE_XSAVE)) {
+      fpu_xsave(fpu);
+      if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+	 return 1;
+   } else if (static_cpu_has(X86_FEATURE_FXSR)) {
+	 fpu_fxsave(fpu);
+   } else {
+	 asm volatile("fnsave %[fx]; fwait"
+                  : [fx] "=m" (fpu->state->fsave));
+	 return 0;
+   }
+
+   if (unlikely(fpu->state->fxsave.swd & X87_FSW_ES)) {
+	asm volatile("fnclex");
+	return 0;
+   }
+   return 1;
+}
+#endif
+
 /** \brief Prepare for using FPU
  *  \param none
  *  \return None
@@ -6397,9 +6469,14 @@ void ATI_API_CALL KCL_fpu_begin(void)
     struct task_struct *cur_task = get_current();
     preempt_disable();
     if (cur_thread->status & TS_USEDFPU)
-        __save_init_fpu(cur_task);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,15,0)
+         KCL_fpu_save_init(cur_task);
+#else
+         __save_init_fpu(cur_task);
+#endif
     else
-        clts();
+         clts();
+
 #else
     /* TS_USEDFPU is removed in kernel 3.3+ and 3.2.8+ with the commit below:
      * https://github.com/torvalds/linux/commit/f94edacf998516ac9d849f7bc6949a703977a7f3
@@ -6414,9 +6491,13 @@ void ATI_API_CALL KCL_fpu_begin(void)
 #else
     if (cur_task->thread.has_fpu)
 #endif
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,15,0)
+        KCL_fpu_save_init(cur_task);
+#else
         __save_init_fpu(cur_task);
+#endif
     else
-        clts();
+         clts();
 #endif
 #endif
 }
@@ -6515,6 +6596,17 @@ void * ATI_API_CALL KCL_create_proc_entry(void *root_dir, const char *name, unsi
     }
 #endif
     return ent;
+}
+
+void KCL_SetTaskNice(int nice)
+{
+    set_user_nice(current, nice);
+    return;
+}
+
+int KCL_TaskNice(void)
+{
+    return task_nice(current);
 }
 
 #endif /* __KERNEL__ */

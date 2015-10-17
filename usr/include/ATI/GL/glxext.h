@@ -137,6 +137,11 @@ extern "C" {
 #define GLX_CONTEXT_PROFILE_MASK_ARB              0x9126
 #define GLX_CONTEXT_CORE_PROFILE_BIT_ARB          0x00000001
 #define GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB 0x00000002
+#define GLX_CONTEXT_ASIC_ID_AMD                   0x91c4 //chip id
+#define GLX_CONTEXT_ASIC_FAMILY_AMD               0x91c5 //asic family
+#define GLX_CONTEXT_ASIC_REV_AMD                  0x91c6 //asic revision
+#define GLX_CONTEXT_DEVICE_MEMORY_SIZE_AMD        0x91c7 //asic device memory
+#define GLX_CONTEXT_DUMMY_DEVICE_AMD              0xffffffff //used to define dummy context
 #define GLXBadProfileARB                          13
 #endif
 
@@ -916,6 +921,13 @@ extern unsigned int glXPresentDesktopAMD(unsigned int presentTexture, unsigned i
 #define GLX_NO_RESET_NOTIFICATION_ARB               0x8261
 #define GLX_LOSE_CONTEXT_ON_RESET_ARB               0x8252
 #define GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB 0x8256
+#endif
+
+#ifndef GLX_ARB_context_flush_control
+#define GLX_ARB_context_flush_control
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_ARB            0x2097
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB       0x0000
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB      0x2098
 #endif
 
 #ifdef __cplusplus

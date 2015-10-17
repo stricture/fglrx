@@ -143,6 +143,12 @@ unsigned int ATI_API_CALL KCL_PCI_GetSlot(KCL_PCI_DevHandle pcidev)
     return PCI_SLOT(dev->devfn);
 }
 
+unsigned int ATI_API_CALL KCL_PCI_GetRevID(KCL_PCI_DevHandle pcidev)
+{
+    struct pci_dev* dev = (struct pci_dev*)pcidev;
+    return dev->revision;
+}
+
 /** \brief Read byte from PCI config space
  ** \param pcidev [in] PCI device handle
  ** \param where [in] PCI register
@@ -278,6 +284,51 @@ int ATI_API_CALL KCL_PCI_EnableDevice(KCL_PCI_DevHandle dev)
     return (pci_enable_device((struct pci_dev*)dev));
 }
 
+/** \brief pre Power up PCI device operations
+ ** \param dev [in] PCI device handle
+ */
+void ATI_API_CALL KCL_PCI_PrePowerUp(KCL_PCI_DevHandle dev)
+{
+    struct pci_dev * pci_dev = (struct pci_dev *)dev;
+    struct pci_dev * bridge = pci_dev->bus->self;
+    u16 reg16;
+    int pos=0;
+
+    pos = pci_find_capability(bridge, 0x10); /*PCI_CAP_ID_EXP*/
+    if(pos)
+    {
+        pci_read_config_word(bridge, pos+16, &reg16); /*PCI_EXP_LNKCTL */
+        if(reg16 & 0x0010) /* Link Disable */
+        {
+            reg16 &= ~0x0010;
+            pci_write_config_word(bridge, pos+16, reg16);
+        }
+
+        pci_read_config_word(bridge, pos + 2, &reg16); /*PCI_EXP_FLAGS*/
+        if((reg16 & 0x000f) > 1) /* check pcie Capability version */
+        {
+            pci_read_config_word(bridge, pos+40, &reg16); /* Device Control 2 */
+            if(!(reg16&0x0400))/* Enable LTR mechanism */
+            {
+                reg16 |= 0x0400;
+                pci_write_config_word(bridge, pos+40, reg16);
+            }
+        }
+    }
+    pci_set_power_state(pci_dev, PCI_D0);
+}
+
+/** \brief post Power up PCI device operations
+ ** \param dev [in] PCI device handle
+ */
+void ATI_API_CALL KCL_PCI_PostPowerUp(KCL_PCI_DevHandle dev)
+{
+    struct pci_dev * pci_dev = (struct pci_dev *)dev;
+    if(pci_enable_device(pci_dev) == 0)
+    {
+        pci_set_master(pci_dev);
+    }
+}
 /** \brief Tell OS to enable bus mastering for the specified PCI device
  ** \param dev [in] PCI device handle
  */
@@ -304,7 +355,9 @@ void ATI_API_CALL KCL_PCI_DisableDevice(KCL_PCI_DevHandle dev)
 {
     // 2.6.20 ealier kernels don't like the driver doing this repeatedly.
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20)
-    pci_disable_device((struct pci_dev*)dev);
+    struct pci_dev * pci_dev = (struct pci_dev *)dev;
+    if(pci_is_enabled(pci_dev))
+        pci_disable_device(pci_dev);
 #endif
 }
 

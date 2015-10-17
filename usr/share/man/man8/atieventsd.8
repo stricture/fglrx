@@ -1,0 +1,123 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "ATIEVENTSD" "8" "05/05/2006" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+atieventsd \- ATI external events daemon
+.SH "SYNOPSIS"
+.HP 11
+\fBatieventsd\fR [\-a\ \fISOCKET\fR] [\-d] [\-h] [\-l\ \fIFILE\fR] [\-m\ \fIFILE\fR] [\-\-nodaemon] [\-\-nosyslog] [\-s\ \fISOCKET\fR] [\-x\ \fISCRIPT\fR]
+.SH "DESCRIPTION"
+.PP
+The ATI External Events Daemon
+\fBatieventsd\fR
+is a user\-level application that monitors various system events such as ACPI or hotplug, then notifies the driver via the X extensions interface that the event has occured.
+.PP
+By default,
+\fBatieventsd\fR
+prints out logging information to the
+\fBsyslogd\fR(8)
+daemon facility unless
+\-\-nosyslog
+is specified. The daemon is shut down by sending a SIGTERM to the daemon process, for example, by
+\fBkillall atieventsd\fR. The various options are used to control daemon behaviour and are explained below.
+.SH "OPTIONS"
+.TP
+\fB\-a \fR\fB\fISOCKET\fR\fR, \fB\-\-acpidsocket=\fR\fB\fISOCKET\fR\fR
+Connect to
+\fBacpid\fR(8)
+socket located at
+\fISOCKET\fR
+instead of at the default location
+\fI/var/run/acpid.socket\fR.
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+Output additional debugging information to the log.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show a brief help message and exit.
+.TP
+\fB\-l \fR\fB\fIFILE\fR\fR, \fB\-\-logfile=\fR\fB\fIFILE\fR\fR
+Output logging information to
+\fIFILE\fR. This output is independent of syslog output thus logging to both
+\fBsyslogd\fR(8)
+and this file is possible.
+.TP
+\fB\-\-nodaemon\fR
+Run atieventsd in the foreground instead of running as a daemon.
+.TP
+\fB\-\-nosyslog\fR
+Do not output log messages to
+\fBsyslogd\fR(8). Normally used in conjunction with
+\-\-logfile
+above to redirect the daemon logging information.
+.TP
+\fB\-s \fR\fB\fISOCKET\fR\fR, \fB\-\-socket=\fR\fB\fISOCKET\fR\fR
+Create atieventsd socket at
+\fISOCKET\fR
+instead of at
+\fI/var/run/atieventsd.socket\fR. This socket is used by
+\fBaticonfig\fR(1)
+to send specific events to atieventsd.
+.TP
+\fB\-x \fR\fB\fISCRIPT\fR\fR, \fB\-\-xauthscript=\fR\fB\fISCRIPT\fR\fR
+Use X authorization script at
+\fISCRIPT\fR
+instead of at
+\fI/etc/ati/authatieventsd.sh\fR. This script is used by atieventsd to be granted authorization access to the X server display. See the section below on the X authorization script for further details.
+.SH "DAEMON POLICIES"
+.PP
+The daemon policies can be adjusted by
+\fBaticonfig\fR(1)
+with the use of the
+\fB\-\-set\-policy=\fR\fB\fISTRING\fR\fR
+option to that command tool, where
+\fISTRING\fR
+can be one of the following values.
+.TP
+\fBhandle_lid\fR
+Enable monitoring of laptop lid open/close events.
+.TP
+\fBignore_lid\fR
+Do not monitor of laptop lid open/close events.
+.SH "X AUTHORIZATION SCRIPT"
+.PP
+The X authorization script provides a distro\-neutral way for the daemon to gain access to the necessary X server display in order to send it commands. The script is located at
+\fI/etc/ati/authatieventsd.sh\fR
+unless overridden by the use of the
+\-\-xauthscript
+keyword above. The script takes three parameters:
+.PP
+The first parameter is either the keyword "grant" to grant access or "revoke" to revoke access.
+.PP
+The second parameter is the display number that the daemon is trying to get authorization for, e.g., ":0".
+.PP
+The third parameter is the name of the X authorization file that the daemon is using, as obtained from
+\fBXauFileName\fR(3x). This file is where the authorization needs to be given. Note that this parameter only makes sense if
+\fBxauth\fR(1)
+is being used. If another mechanism such as
+\fBxhost\fR(1)
+is being used it can be ignored. If no form of authorization is being done, the script can simply return 0 and the daemon will assume that it is always authorized.
+.PP
+The return code from the script should be zero if authorization was successfully granted or revoked, and nonzero if an error occurred.
+.SH "AUTHOR"
+.PP
+ATI Technologies Inc.
+.SH "REPORTING BUGS"
+.PP
+Please go to http://support.ati.com to report any bugs.
+.SH "COPYRIGHT"
+.PP
+Copyright (c) 2006 ATI Technologies Inc. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+.SH "SEE ALSO"
+.PP
+\fBaticonfig\fR(1),
+\fBacpid\fR(8),
+\fBsyslogd\fR(8),
+\fBxauth\fR(1),
+\fBxhost\fR(1)

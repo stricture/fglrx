@@ -1,8 +1,0 @@
-#PKGLIBDIR#/libfglrx_dm.so.1.0 #PKGLIBDIR#/libfglrx_dm.so.1
-#PKGLIBDIR#/libatiuki.so.1.0 #PKGLIBDIR#/libatiuki.so.1
-#PKGLIBDIR#/libGL.so.1.2 #PKGLIBDIR#/libGL.so.1
-#PKGLIBDIR#/libGL.so.1 #PKGLIBDIR#/libGL.so
-#PKGLIBDIR#/libOpenCL.so.1 #PKGLIBDIR#/libOpenCL.so
-#PKGLIBDIR#/libAMDXvBA.so.1.0 #PKGLIBDIR#/libAMDXvBA.so.1
-#PKGLIBDIR#/libatiadlxx.so lib/libatiadlxx.so
-#PKGLIBDIR#/bin/aticonfig #PKGLIBDIR#/bin/amdconfig

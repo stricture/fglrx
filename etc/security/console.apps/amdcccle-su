@@ -1,0 +1,3 @@
+USER=root
+PROGRAM=/bin/sh
+SESSION=yes

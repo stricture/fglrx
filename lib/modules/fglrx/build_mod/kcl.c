@@ -25,6 +25,10 @@
 #include "kcl_debug.h"
 #include <linux/vt_kern.h>
 #include <linux/vt_buffer.h>
+#include <linux/firmware.h>
+#include <linux/device.h>
+#include <linux/slab.h>
+#include <linux/pci.h>
 
 #define SUSPEND_CONSOLE  (MAX_NR_CONSOLES-1)
 
@@ -59,4 +63,69 @@ void ATI_API_CALL KCL_Init_Suspend_Console(void)
         start = (unsigned short *)vc->vc_origin;
         scr_memsetw(start, vc->vc_video_erase_char, 2 * count);
     }
+}
+
+int  ATI_API_CALL KCL_Request_Firmware(KCL_FIRMWARE *pFirmware)
+{
+    const struct firmware *pfw = NULL;
+    struct device *pdev = NULL;
+    struct pci_dev *pdev_pci = NULL;
+    
+    if(NULL == pFirmware)
+    {
+        return -EINVAL;
+    }
+    
+    if(NULL == pFirmware->name || NULL == pFirmware->dev)
+    {
+        return -EINVAL;
+    }
+
+    pdev_pci = (struct pci_dev *)(pFirmware->dev);
+    pdev = (struct device *)(&pdev_pci->dev);
+    
+    if(NULL == pdev)
+    {
+        return -EINVAL;
+    }
+    
+    pfw = (const struct firmware *)kmalloc(sizeof(struct firmware), GFP_KERNEL);
+    if(NULL == pfw)
+    {
+        return -EINVAL;
+    }
+
+    memset((void *)pfw, 0, sizeof(struct firmware));
+    if(request_firmware(&pfw, (char *)pFirmware->name, pdev) != 0)
+    {
+        kfree((void *)pfw);
+        pfw = NULL;
+        return -EINVAL;
+    }
+    
+    pFirmware->size = pfw->size;
+    pFirmware->data = (void *)pfw->data; 
+    pFirmware->fw = (void *)pfw;
+    
+    return 0;
+}
+
+int ATI_API_CALL KCL_Release_Firmware(KCL_FIRMWARE *pFirmware)
+{
+    
+    if(NULL == pFirmware)
+    {
+        return -EINVAL;
+    }
+    
+    if(NULL == pFirmware->fw)
+    {
+        return -EINVAL;
+    }
+    
+    release_firmware((struct firmware *)pFirmware->fw);
+    kfree(pFirmware->fw);
+    pFirmware->fw = NULL;
+    
+    return 0;
 }

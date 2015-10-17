@@ -282,6 +282,7 @@ typedef struct { volatile unsigned int counter; } KCL_TYPE_Atomic;
 
 typedef enum
 {
+    KCL_ERROR_TIMED_OUT,
     KCL_ERROR_DEVICE_RESOURCE_BUSY,
     KCL_ERROR_INVALID_ARGUMENT,
     KCL_ERROR_PERMISSION_DENIED,
@@ -343,6 +344,7 @@ extern void          ATI_API_CALL KCL_SetCurrentProcessState(KCL_ENUM_ProcessSta
 extern const char*   ATI_API_CALL KCL_GetModuleParamString(void);
 extern KCL_TYPE_Pid  ATI_API_CALL KCL_GetPid(void);
 extern KCL_TYPE_Tgid ATI_API_CALL KCL_GetTgid(void);
+extern void *        ATI_API_CALL KCL_GetGroupLeader(void);
 extern KCL_TYPE_Uid  ATI_API_CALL KCL_GetEffectiveUid(void);
 extern void          ATI_API_CALL KCL_DelayInMicroSeconds(unsigned long usecs);
 extern void          ATI_API_CALL KCL_DelayUseTSC(unsigned long usecs);
@@ -528,6 +530,7 @@ extern int ATI_API_CALL KCL_MEM_VerifyWriteAccess(void* addr, kcl_size_t size);
 extern unsigned long ATI_API_CALL KCL_GetPageTableByVirtAddr(unsigned long virtual_addr, unsigned long* page_addr);
 extern unsigned int ATI_API_CALL KCL_GetPageSizeByVirtAddr(unsigned long virtual_addr, unsigned int* page_size);
 extern int ATI_API_CALL KCL_LockUserPages(unsigned long vaddr, unsigned long* page_list, unsigned int page_cnt);
+extern int ATI_API_CALL KCL_LockReadOnlyUserPages(unsigned long vaddr, unsigned long* page_list, unsigned int page_cnt);
 extern void ATI_API_CALL KCL_UnlockUserPages(unsigned long* page_list, unsigned int page_cnt);
 extern int ATI_API_CALL KCL_TestAndClearPageDirtyFlag(unsigned long virtual_addr, unsigned int page_size);
 extern unsigned long ATI_API_CALL KCL_MEM_AllocLinearAddrInterval(KCL_IO_FILE_Handle  file, unsigned long addr, unsigned long len, unsigned long pgoff);
@@ -615,6 +618,9 @@ extern void ATI_API_CALL firegl_pm_lock_highmem_gart(struct drm_device* dev, int
 
 extern int ATI_API_CALL KCL_PM_Is_SuspendToRam(int state);
 /*****************************************************************************/
+
+extern void KCL_SetTaskNice(int nice);
+extern int KCL_TaskNice(void);
 
 /* global constants */
 extern const char*          KCL_SYSINFO_OsVersionString;

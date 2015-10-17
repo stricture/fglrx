@@ -83,6 +83,8 @@ KCL_PCI_DevHandle ATI_API_CALL KCL_PCI_GetDevHandle(
 KCL_TYPE_U8 ATI_API_CALL KCL_PCI_GetBusNumber(KCL_PCI_DevHandle pcidev);
 unsigned int ATI_API_CALL KCL_PCI_GetFunc(KCL_PCI_DevHandle pcidev);
 unsigned int ATI_API_CALL KCL_PCI_GetSlot(KCL_PCI_DevHandle pcidev);
+unsigned int ATI_API_CALL KCL_PCI_GetRevID(KCL_PCI_DevHandle pcidev);
+
 int ATI_API_CALL KCL_PCI_ReadConfigByte(
     KCL_PCI_DevHandle dev, KCL_TYPE_U8 where, KCL_TYPE_U8* val_ptr);
 
@@ -132,6 +134,8 @@ int ATI_API_CALL KCL_PCI_RELEASE_IO_Res (void* handle);
 #endif /*ifdef ESX*/
 
 int ATI_API_CALL KCL_PCI_EnableDevice(KCL_PCI_DevHandle dev);
+void ATI_API_CALL KCL_PCI_PrePowerUp(KCL_PCI_DevHandle dev);
+void ATI_API_CALL KCL_PCI_PostPowerUp(KCL_PCI_DevHandle dev);
 void ATI_API_CALL KCL_PCI_EnableBusMastering(KCL_PCI_DevHandle dev);
 
 #ifndef ESX

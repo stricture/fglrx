@@ -186,6 +186,18 @@ typedef Bool ( * PFNGLXRESETFRAMECOUNTNVPROC) (Display *dpy, int screen);
 extern GLXContext glXCreateContextAttribsARB(Display *dpy, GLXFBConfig config, GLXContext share_context, Bool direct, const int *attrib_list);
 #endif /* GLX_ARB_create_context */
 
+/*
+ *  GLX_ARB_context_flush_control
+ */
+#ifndef GLX_ARB_context_flush_control
+#define GLX_ARB_context_flush_control 1
+
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_ARB        0x2097
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB   0x0000
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB  0x2098
+
+#endif /* GLX_ARB_context_flush_control */
+
 #ifdef __cplusplus
 }
 #endif

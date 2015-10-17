@@ -31,8 +31,19 @@ typedef enum{
     KCL_SIG_TERM = 15,     //termination 
 }KCL_SIG;
 
+
+typedef struct {
+    void *dev;          // pci device handle
+    void *name;         // firmware name to be loaded
+    unsigned long size; // firmware size
+    void *data;         // firmware buffer address
+    void *fw;           // firmware struct
+}KCL_FIRMWARE;
+
+
 extern void ATI_API_CALL KCL_SEND_SIG(int pid, KCL_SIG sig);
 extern void ATI_API_CALL KCL_Init_Suspend_Console(void);
-
+extern int  ATI_API_CALL KCL_Request_Firmware(KCL_FIRMWARE *pFirmware);
+extern int  ATI_API_CALL KCL_Release_Firmware(KCL_FIRMWARE *pFirmware);
 #endif
 
