@@ -277,7 +277,7 @@ binary-arch: gen-abi-substvars
 
 	# Blacklist any other driver that udev may want to load instead of fglrx
 	# and create an alias for the module so that it can be used as fglrx
-	printf '$(subst $(newline),\n,${blacklist_file})' > $(CURDIR)/debian/$(PKG_driver)/$(PKG_libconfdir)/modprobe.conf
+	printf '$(subst $(newline),\n,${blacklist_file})' > $(CURDIR)/debian/$(PKG_driver)/$(PKG_libdir)/modprobe.conf
 
 	#ld.so.conf
 	echo "/$(PKG_libdir)" >	"$(CURDIR)/debian/$(PKG_driver)/$(ld_so_conf_path)"

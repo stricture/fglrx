@@ -119,7 +119,7 @@ if [ "$1" = "configure" ]; then
         --slave /#LIBDIR#/xorg/modules/drivers/fglrx_drv.so #DEB_HOST_MULTIARCH#_fglrx_drv /#PKGLIBDIR#/xorg/modules/drivers/fglrx_drv.so \
         --slave /#LIBDIR#/dri/fglrx_dri.so #DEB_HOST_MULTIARCH#_fglrx_dri /#PKGLIBDIR#/dri/fglrx_dri.so \
         --slave /#LIBDIR#/libAMDXvBA.cap #DEB_HOST_MULTIARCH#_libAMDXvBA_cap /#PKGLIBDIR#/libAMDXvBA.cap \
-        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#LIBDIR#/modprobe.conf \
+        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#PKGLIBDIR#/modprobe.conf \
         --slave /#SYSCONFDIR#/X11/Xsession.d/10fglrx #DEB_HOST_MULTIARCH#_10fglrx /#PKGLIBDIR#/10fglrx \
         --slave /#SYSCONFDIR#/ati #DEB_HOST_MULTIARCH#_ati_conf /#PKGLIBDIR#/#SYSCONFDIR#/ati \
         --slave /#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd #DEB_HOST_MULTIARCH#_amdocl64.icd /#PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd \
@@ -142,7 +142,7 @@ if [ "$1" = "configure" ]; then
         --slave /#LIBDIR#/xorg/modules/drivers/fglrx_drv.so #DEB_HOST_MULTIARCH#_fglrx_drv /#PKGLIBDIR#/xorg/modules/drivers/fglrx_drv.so \
         --slave /#LIBDIR#/dri/fglrx_dri.so #DEB_HOST_MULTIARCH#_fglrx_dri /#PKGLIBDIR#/dri/fglrx_dri.so \
         --slave /#LIBDIR#/libAMDXvBA.cap #DEB_HOST_MULTIARCH#_libAMDXvBA_cap /#PKGLIBDIR#/libAMDXvBA.cap \
-        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#LIBDIR#/modprobe.conf \
+        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#PKGLIBDIR#/modprobe.conf \
         --slave /#SYSCONFDIR#/X11/Xsession.d/10fglrx #DEB_HOST_MULTIARCH#_10fglrx /#PKGLIBDIR#/10fglrx \
         --slave /#SYSCONFDIR#/ati #DEB_HOST_MULTIARCH#_ati_conf /#PKGLIBDIR#/#SYSCONFDIR#/ati \
         --slave /#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd #DEB_HOST_MULTIARCH#_amdocl64.icd /#PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd \
