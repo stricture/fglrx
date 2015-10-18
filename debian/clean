@@ -1,7 +1,7 @@
-debian/10hashstack-amd-driver
+debian/10fglrx
 debian/dkms.conf
-debian/hashstack-amd-driver.install
-debian/hashstack-amd-driver-dev.install
-debian/hashstack-amd-driver-amdcccle.install
-debian/overrides/hashstack-amd-driver
-debian/modaliases/hashstack-amd-driver-modules.alias.override
+debian/fglrx.install
+debian/fglrx-dev.install
+debian/fglrx-amdcccle.install
+debian/overrides/fglrx
+debian/modaliases/fglrx-modules.alias.override
