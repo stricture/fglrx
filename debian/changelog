@@ -1,3 +1,9 @@
+hashstack-amd-driver (2:15.201.1151-1sagitta1) precise; urgency=low
+
+  * Fix file paths
+
+ -- Jeremi Gosney <jgosney@sagitta.pw>  Sun, 18 Oct 2015 05:47:22 -0700
+
 hashstack-amd-driver (2:15.201.1151-0sagitta1) precise; urgency=low
 
   * Upgrade to 15.9

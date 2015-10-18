@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright (C) 2007 Mario Limonciello
 # Copyright (C) 2009-2011 Canonical Ltd.
 
@@ -119,7 +119,7 @@ if [ "$1" = "configure" ]; then
         --slave /#LIBDIR#/xorg/modules/drivers/fglrx_drv.so #DEB_HOST_MULTIARCH#_fglrx_drv /#PKGLIBDIR#/xorg/modules/drivers/fglrx_drv.so \
         --slave /#LIBDIR#/dri/fglrx_dri.so #DEB_HOST_MULTIARCH#_fglrx_dri /#PKGLIBDIR#/dri/fglrx_dri.so \
         --slave /#LIBDIR#/libAMDXvBA.cap #DEB_HOST_MULTIARCH#_libAMDXvBA_cap /#PKGLIBDIR#/libAMDXvBA.cap \
-        --slave /#SYSCONFDIR#/modprobe.d/fglrx.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /lib/fglrx/modprobe.conf \
+        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#LIBDIR#/modprobe.conf \
         --slave /#SYSCONFDIR#/X11/Xsession.d/10fglrx #DEB_HOST_MULTIARCH#_10fglrx /#PKGLIBDIR#/10fglrx \
         --slave /#SYSCONFDIR#/ati #DEB_HOST_MULTIARCH#_ati_conf /#PKGLIBDIR#/#SYSCONFDIR#/ati \
         --slave /#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd #DEB_HOST_MULTIARCH#_amdocl64.icd /#PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd \
@@ -127,7 +127,7 @@ if [ "$1" = "configure" ]; then
         --slave /#XORGEXTRA# #DEB_HOST_MULTIARCH#_xorg_extra_modules /#PKGLIBDIR#/xorg \
         --slave /#LIBDIR#/libaticalcl.so #DEB_HOST_MULTIARCH#_libaticalcl.so /#PKGLIBDIR#/libaticalcl.so \
         --slave /#LIBDIR#/libaticalrt.so #DEB_HOST_MULTIARCH#_libaticalrt.so /#PKGLIBDIR#/libaticalrt.so \
-        --slave /#DATADIR#/grub-gfxpayload-lists/blacklist/10_proprietary-graphics-drivers #DEB_HOST_MULTIARCH#_grub_fb_blacklist /#PKGDATADIR#/fglrx.grub-gfxpayload
+        --slave /#DATADIR#/grub-gfxpayload-lists/blacklist/10_proprietary-graphics-drivers #DEB_HOST_MULTIARCH#_grub_fb_blacklist /#PKGDATADIR#/#DRIVERNAME#.grub-gfxpayload
 
     # This is for switchable graphics
     # Note: the radeon kernel module is still blacklisted
@@ -142,7 +142,7 @@ if [ "$1" = "configure" ]; then
         --slave /#LIBDIR#/xorg/modules/drivers/fglrx_drv.so #DEB_HOST_MULTIARCH#_fglrx_drv /#PKGLIBDIR#/xorg/modules/drivers/fglrx_drv.so \
         --slave /#LIBDIR#/dri/fglrx_dri.so #DEB_HOST_MULTIARCH#_fglrx_dri /#PKGLIBDIR#/dri/fglrx_dri.so \
         --slave /#LIBDIR#/libAMDXvBA.cap #DEB_HOST_MULTIARCH#_libAMDXvBA_cap /#PKGLIBDIR#/libAMDXvBA.cap \
-        --slave /#SYSCONFDIR#/modprobe.d/fglrx.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /lib/fglrx/modprobe.conf \
+        --slave /#SYSCONFDIR#/modprobe.d/#DRIVERNAME#.conf #DEB_HOST_MULTIARCH#_fglrx_modconf /#LIBDIR#/modprobe.conf \
         --slave /#SYSCONFDIR#/X11/Xsession.d/10fglrx #DEB_HOST_MULTIARCH#_10fglrx /#PKGLIBDIR#/10fglrx \
         --slave /#SYSCONFDIR#/ati #DEB_HOST_MULTIARCH#_ati_conf /#PKGLIBDIR#/#SYSCONFDIR#/ati \
         --slave /#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd #DEB_HOST_MULTIARCH#_amdocl64.icd /#PKGLIBDIR#/#SYSCONFDIR#/OpenCL/vendors/amdocl64.icd \
@@ -150,7 +150,7 @@ if [ "$1" = "configure" ]; then
         --slave /#XORGEXTRA# #DEB_HOST_MULTIARCH#_xorg_extra_modules /#PXDIR#/xorg \
         --slave /#LIBDIR#/libaticalcl.so #DEB_HOST_MULTIARCH#_libaticalcl.so /#PKGLIBDIR#/libaticalcl.so \
         --slave /#LIBDIR#/libaticalrt.so #DEB_HOST_MULTIARCH#_libaticalrt.so /#PKGLIBDIR#/libaticalrt.so \
-        --slave /#DATADIR#/grub-gfxpayload-lists/blacklist/10_proprietary-graphics-drivers #DEB_HOST_MULTIARCH#_grub_fb_blacklist /#PKGDATADIR#/fglrx.grub-gfxpayload
+        --slave /#DATADIR#/grub-gfxpayload-lists/blacklist/10_proprietary-graphics-drivers #DEB_HOST_MULTIARCH#_grub_fb_blacklist /#PKGDATADIR#/#DRIVERNAME#.grub-gfxpayload
 
     # Install just the ld.so.conf.d alternatives for the secondary architecture.
     # We need only to ensure that any mesa ld.so.conf.d alternative isn't active.
